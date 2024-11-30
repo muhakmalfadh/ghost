@@ -1,0 +1,27 @@
+services:
+  ghost:
+    image: ghost:alpine
+    container_name: ghost
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    ports:
+      - "80:2368"
+    env_file: "./.env.ghost"
+    volumes:
+      - ./data/ghost:/var/lib/ghost/content
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    ports:
+      - "3306"
+    env_file: "./.env.mariadb"
+    volumes:
+      - ./data/mariadb:/var/lib/mysql:Z
+
+networks:
+  default:
+    name: ghost-network
+    driver: bridge
